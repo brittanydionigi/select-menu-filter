@@ -199,7 +199,8 @@ $(function() {
 		[196,"Panama City","Panama","South America"],
 		[197,"Lima","Peru","South America"],
 		[198,"Montevideo","Uruguay","South America"],
-		[199,"Caracas","Venezuela (Bolivarian Republic of)","South America"]
+		[199,"Caracas","Venezuela (Bolivarian Republic of)","South America"],
+		[200,"Caracas","Venezuela (Bolivarian Republic of)","South America"]
 	]
 
 
