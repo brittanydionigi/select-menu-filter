@@ -1,7 +1,9 @@
+
+
+
 // Cities data
 $(function() {
 	var tags = [
-		[1,"Algiers","Algeria","Africa"],
 		[2,"Gaborone","Botswana","Africa"],
 		[3,"Kinshasa","Democratic Republic of the Congo","Africa"],
 		[4,"Alexandria","Egypt","Africa"],
