@@ -1,84 +1,3 @@
-// Combo Box JqueryUI
-(function($) {
-    $.widget("ui.combobox", {
-        _create: function() {
-            var self = this,
-                select = this.element.hide(),
-                selected = select.children(":selected"),
-                value = selected.val() ? selected.text() : "";
-            var input = this.input = $("<input>").insertAfter(select).val(value).autocomplete({
-                delay: 0,
-                minLength: 0,
-                source: function(request, response) {
-                    var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
-                    response(select.children("option").map(function() {
-                        var text = $(this).text();
-                        if (this.value && (!request.term || matcher.test(text))) return {
-                            label: text.replace(
-                            new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + $.ui.autocomplete.escapeRegex(request.term) + ")(?![^<>]*>)(?![^&;]+;)", "gi"), "<strong>$1</strong>"),
-                            value: text,
-                            option: this
-                        };
-                    }));
-                },
-                change: function(event, ui) {
-                    if (!ui.item) {
-                        var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex($(this).val()) + "$", "i"),
-                            valid = false;
-                        select.children("option").each(function() {
-                            if ($(this).text().match(matcher)) {
-                                this.selected = valid = true;
-                                return false;
-                            }
-                        });
-                        if (!valid) {
-                            // remove invalid value, as it didn't match anything
-                            $(this).val("");
-                            select.val("");
-                            input.data("autocomplete").term = "";
-                            return false;
-                        }
-                    }
-                }
-            }).addClass("ui-widget ui-widget-content ui-corner-left");
-
-            input.data("autocomplete")._renderItem = function(ul, item) {
-                return $("<li></li>").data("item.autocomplete", item).append("<a>" + item.label + "</a>").appendTo(ul);
-            };
-
-            this.button = $("<button type='button'>&nbsp;</button>").attr("tabIndex", -1).attr("title", "Show All Items").insertAfter(input).button({
-                icons: {
-                    primary: "ui-icon-triangle-1-s"
-                },
-                text: false
-            }).removeClass("ui-corner-all").addClass("ui-corner-right ui-button-icon").click(function() {
-                // close if already visible
-                if (input.autocomplete("widget").is(":visible")) {
-                    input.autocomplete("close");
-                    return;
-                }
-
-                // pass empty string as value to search for, displaying all results
-                input.autocomplete("search", "");
-                input.focus();
-            });
-        },
-
-        destroy: function() {
-            this.input.remove();
-            this.button.remove();
-            this.element.show();
-            $.Widget.prototype.destroy.call(this);
-        },
-        _setOption: function(key, value) {
-            this.input.data("autocomplete")._setOption(key, value);
-        }
-
-    });
-})(jQuery);
-
-
-
 // Cities data
 $(function() {
 	var tags = [
@@ -292,7 +211,7 @@ $(function() {
 		var len = inputArray.length;
 		var outputArray = [];
 		var temp = {};
-	
+
 		for (i = 0; i < len; i++) {
 			temp[inputArray[i]] = 0;
 		}
@@ -301,28 +220,28 @@ $(function() {
 		}
 		return outputArray;
 	}
-	
-	
-	
+
+
+
 	// Build arrays for each select menu
 	var continents = [];
 		for (var i = 0; i < tags.length; i++) {
 		continents.push(tags[i][3]);
 	}
-	
+
 	var countries = [];
 		for (var i = 0; i < tags.length; i++) {
 		countries.push(tags[i][2]);
 	}
-	
+
 	var cities = [];
 		for (var i = 0; i < tags.length; i++) {
 		cities.push(tags[i][1]);
 	}
-	
-	
-	
-	
+
+
+
+
 	// Filter select menus based on what you've already selected
 	function filteredArray(inputarray, filter, indexno, id) {
 		var inputarray = jQuery.grep(inputarray, function(element,index){
@@ -331,67 +250,67 @@ $(function() {
 		var inputarray = (removeDuplicates(inputarray));
 		$('#select-' + id + '').combobox();
 			$('#select-' + id + '').combobox( "option", "source", inputarray );
-			$('.ui-autocomplete-input').focus(function(){           
+			$('.ui-autocomplete-input').focus(function(){
 				$(this).autocomplete("search", "");
 			});
-			
+
 		if (indexno == 3) { $('#2 .ui-autocomplete-input').val('Select Country'); $('#3 .ui-autocomplete-input').val('Select City'); }
 		if (indexno == 2) { $('#3 .ui-autocomplete-input').val('Select City'); }
 	};
-			
-			
-	
-	
+
+
+
+
 	// Combobox functions
 	$("#select-one, #select-two, #select-three").combobox(); // Set initial combobox
-	
+
 	$("#select-one").combobox("option", "source", removeDuplicates(continents)); // Set data source for each
 	$("#select-two").combobox("option", "source", removeDuplicates(countries));
 	$("#select-three").combobox("option", "source", cities);
-	
-	
+
+
 	$("#select-one").combobox({ select: function(event, ui) {
 			var val = ui.item.value;
 			filteredArray(countries, val, 3, 'two');
 			$('#2 .disabled').css('display','none');
-		}			
-	});			
-	
+		}
+	});
+
 	$("#select-two").combobox({ select: function(event, ui) {
 			var val = ui.item.value;
 			filteredArray(cities, val, 2, 'three');
 			$('#3 .disabled').css('display','none');
 		}
-	});	
-	
-	// Target IE since the functionality is funky 
+	});
+
+	// Target IE since the functionality is funky
 	var ie = (function(){
 		var undef,
 			v = 3,
 			div = document.createElement('div'),
 			all = div.getElementsByTagName('i');
-	 
+
 		while (
 			div.innerHTML = '<!--[if gt IE ' + (++v) + ']><i></i><![endif]-->',
 			all[0]
-		); 
+		);
 		return v > 4 ? v : undef;
-	 
+
 	}());
 
 	// Display dropdown & clear input on focus/click (needs both events to keep field clear when focusing on dropdown menu)
 	if (!ie) {
-		$('.ui-autocomplete-input').bind('focus click', function(){           
+		$('.ui-autocomplete-input').bind('focus click', function(){
 			$(this).autocomplete("search", "");
 			$(this).val('');
 		});
 	}
-	
+
 	else if (ie) {
-		$('.ui-autocomplete-input').bind('click', function(){           
+		$('.ui-autocomplete-input').bind('click', function(){
 			$(this).autocomplete("search", "");
 		});
 	}
-	
-	
+
+
 });
