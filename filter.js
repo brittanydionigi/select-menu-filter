@@ -224,20 +224,12 @@ $(function() {
 	}
 
 
-
 	// Build arrays for each select menu
-	var continents = [];
-		for (var i = 0; i < tags.length; i++) {
+	var continents = countries = cities = [];
+
+	for (var i = 0; i < tags.length; i++) {
 		continents.push(tags[i][3]);
-	}
-
-	var countries = [];
-		for (var i = 0; i < tags.length; i++) {
 		countries.push(tags[i][2]);
-	}
-
-	var cities = [];
-		for (var i = 0; i < tags.length; i++) {
 		cities.push(tags[i][1]);
 	}
 
